@@ -8,6 +8,14 @@
   <strong>Durable checkpoint · Handoff · Forensic recovery · Safe resume</strong>
 </p>
 
+<p align="center">
+  <a href="https://github.com/MuzhiCoder/codex-wip-skill/releases/tag/v0.1.0"><strong>v0.1.0 Release</strong></a>
+  ·
+  <a href="https://muzhicoder.github.io/codex-wip-skill/"><strong>Live Demo</strong></a>
+  ·
+  <a href="https://github.com/openai/codex/issues/42725"><strong>Curated Marketplace Review</strong></a>
+</p>
+
 `codex-wip` packages the `$wip` continuity skill for Codex Plugin/Marketplace installation.
 
 It helps preserve and recover long-running coding work across usage-limit exhaustion, provider/account changes, inaccessible conversations, crashes, context loss, and machine migration.
@@ -49,5 +57,7 @@ The following images are illustrative product previews used by the Codex plugin 
 - Workflow preview: `assets/workflow-overview.png`
 
 License: MIT
+
+Release: https://github.com/MuzhiCoder/codex-wip-skill/releases/tag/v0.1.0
 
 Homepage: https://muzhicoder.github.io/codex-wip-skill/
