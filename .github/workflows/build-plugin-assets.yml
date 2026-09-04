@@ -1,0 +1,62 @@
+name: build-plugin-assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "plugins/codex-wip/assets/source/**"
+      - ".github/workflows/build-plugin-assets.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install renderer
+        run: python -m pip install --disable-pip-version-check cairosvg
+
+      - name: Render Plugin Directory assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import cairosvg
+
+          root = Path("plugins/codex-wip/assets")
+          source = root / "source"
+          outputs = {
+              source / "plugin-directory.svg": root / "plugin-directory.png",
+              source / "workflow-overview.svg": root / "workflow-overview.png",
+          }
+          for src, dst in outputs.items():
+              cairosvg.svg2png(
+                  url=str(src),
+                  write_to=str(dst),
+                  output_width=1600,
+                  output_height=900,
+              )
+              print(f"rendered {src} -> {dst}")
+          PY
+
+      - name: Commit rendered PNGs
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add plugins/codex-wip/assets/plugin-directory.png plugins/codex-wip/assets/workflow-overview.png
+          if git diff --cached --quiet; then
+            echo "Rendered assets are already up to date."
+            exit 0
+          fi
+          git commit -m "chore: render Plugin Directory screenshots"
+          git push
