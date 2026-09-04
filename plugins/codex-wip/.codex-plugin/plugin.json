@@ -8,6 +8,7 @@
   },
   "homepage": "https://muzhicoder.github.io/codex-wip-skill/",
   "repository": "https://github.com/MuzhiCoder/codex-wip-skill",
+  "license": "MIT",
   "keywords": [
     "codex",
     "wip",
@@ -35,7 +36,12 @@
       "Recover this interrupted coding task from the current Git state.",
       "Resume from the latest verified WIP checkpoint."
     ],
-    "brandColor": "#111827",
-    "screenshots": []
+    "brandColor": "#312E81",
+    "composerIcon": "./assets/composer-icon.svg",
+    "logo": "./assets/logo.svg",
+    "screenshots": [
+      "./assets/plugin-directory.png",
+      "./assets/workflow-overview.png"
+    ]
   }
 }
