@@ -34,19 +34,27 @@ Git remains the source of truth for code. `current.md` is the source of truth fo
 
 ## Install
 
-Copy this repository into your Codex skills directory:
+Clone the repository somewhere convenient and run the Windows installer:
+
+```powershell
+git clone https://github.com/MuzhiCoder/codex-wip-skill.git
+cd codex-wip-skill
+.\scripts\install.ps1
+```
+
+Or copy the repository contents manually to:
 
 ```text
 %USERPROFILE%\.codex\skills\wip
 ```
 
-On Windows you can also run:
-
-```powershell
-.\scripts\install.ps1
-```
-
 If `CODEX_HOME` is set, the installer uses `$env:CODEX_HOME\skills\wip`; otherwise it uses `$HOME\.codex\skills\wip`.
+
+After installation, start a fresh Codex session and verify discovery with:
+
+```text
+$wip status
+```
 
 ## Typical interrupted-session recovery
 
@@ -93,13 +101,27 @@ The snapshot script is metadata-only. It does not persist raw diff contents, fil
 
 The validator also checks for several common secret markers in `current.md`.
 
+## Tests
+
+Run locally:
+
+```powershell
+python scripts/test_wip_snapshot.py
+python scripts/test_wip_validate.py
+```
+
+The GitHub Actions workflow runs the same test suite across Windows and Linux on Python 3.11–3.13.
+
 ## Repository layout
 
 ```text
 .
+├── .github/workflows/test.yml
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
+├── examples/
+│   └── codex-wip.example.md
 ├── references/
 │   ├── handoff-protocol.md
 │   ├── recovery-protocol.md
