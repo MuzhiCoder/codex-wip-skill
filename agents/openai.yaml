@@ -1,0 +1,4 @@
+interface:
+  display_name: "WIP Continuity"
+  short_description: "Checkpoint, hand off, and recover interrupted coding work"
+  default_prompt: "Use $wip to checkpoint, hand off, recover, or resume the current repository work without losing implementation context."
