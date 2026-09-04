@@ -1,0 +1,41 @@
+{
+  "name": "codex-wip",
+  "version": "0.1.0",
+  "description": "Durable checkpoint, handoff, forensic recovery, and resume for interrupted Codex coding work.",
+  "author": {
+    "name": "MuzhiCoder",
+    "url": "https://github.com/MuzhiCoder"
+  },
+  "homepage": "https://muzhicoder.github.io/codex-wip-skill/",
+  "repository": "https://github.com/MuzhiCoder/codex-wip-skill",
+  "keywords": [
+    "codex",
+    "wip",
+    "checkpoint",
+    "handoff",
+    "recovery",
+    "resume",
+    "developer-tools"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codex WIP",
+    "shortDescription": "Resume interrupted Codex coding work safely",
+    "longDescription": "Preserve engineering continuity across usage-limit exhaustion, provider or account switches, inaccessible Codex conversations, crashes, context loss, and machine migration using repository-grounded checkpoints and forensic recovery.",
+    "developerName": "MuzhiCoder",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://muzhicoder.github.io/codex-wip-skill/",
+    "defaultPrompt": [
+      "Checkpoint the current repository before I switch providers or machines.",
+      "Recover this interrupted coding task from the current Git state.",
+      "Resume from the latest verified WIP checkpoint."
+    ],
+    "brandColor": "#111827",
+    "screenshots": []
+  }
+}
