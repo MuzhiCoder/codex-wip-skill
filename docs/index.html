@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Codex WIP Skill · Continuity Demo</title>
+  <style>
+    :root {
+      --bg:#07111f; --panel:#0d1b2d; --panel2:#12243a; --text:#eaf2ff;
+      --muted:#91a4bd; --line:#29435f; --accent:#67e8f9; --accent2:#8b5cf6;
+      --ok:#34d399; --warn:#fbbf24; --bad:#fb7185; --shadow:0 24px 70px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:
+      radial-gradient(circle at 15% 10%,rgba(103,232,249,.13),transparent 28%),
+      radial-gradient(circle at 85% 20%,rgba(139,92,246,.15),transparent 25%),var(--bg);min-height:100vh}
+    a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:28px 22px 72px}
+    header{text-align:center;padding:34px 12px 28px}.eyebrow{color:var(--accent);letter-spacing:.16em;text-transform:uppercase;font-weight:700;font-size:12px}
+    h1{font-size:clamp(34px,6vw,68px);line-height:1.03;margin:10px 0 14px;letter-spacing:-.04em}
+    .subtitle{max-width:820px;margin:0 auto;color:var(--muted);font-size:17px}
+    .lang{display:inline-flex;margin-top:20px;border:1px solid var(--line);border-radius:999px;padding:4px;background:rgba(13,27,45,.75)}
+    .lang button{border:0;background:transparent;color:var(--muted);padding:8px 15px;border-radius:999px;cursor:pointer;font-weight:700}
+    .lang button.active{background:linear-gradient(135deg,var(--accent),#60a5fa);color:#04101a}
+    .grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.card{background:linear-gradient(180deg,rgba(18,36,58,.94),rgba(13,27,45,.94));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .demo{padding:22px;overflow:hidden}.side{padding:20px}.side h2,.demo h2{margin:0 0 7px;font-size:19px}.muted{color:var(--muted)}
+    .controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 24px}.controls button{border:1px solid var(--line);background:#0a1727;color:var(--text);padding:9px 12px;border-radius:11px;cursor:pointer;font-weight:700}
+    .controls button.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(103,232,249,.12) inset;color:var(--accent)}
+    .flow{position:relative;display:grid;grid-template-columns:repeat(7,minmax(100px,1fr));gap:18px;align-items:center;padding:28px 4px 38px;min-width:900px}
+    .track{position:absolute;left:7%;right:7%;top:72px;height:3px;background:var(--line);overflow:hidden;border-radius:9px}.pulse{height:100%;width:18%;background:linear-gradient(90deg,transparent,var(--accent),#fff,transparent);animation:travel 3.6s linear infinite}
+    @keyframes travel{from{transform:translateX(-120%)}to{transform:translateX(680%)}}
+    .node{position:relative;text-align:center;opacity:.42;transform:translateY(7px);transition:.45s ease}.node.active{opacity:1;transform:none}.node .dot{width:54px;height:54px;border-radius:17px;margin:0 auto 10px;display:grid;place-items:center;background:#0a1727;border:1px solid var(--line);font-size:22px;position:relative;z-index:2;transition:.45s ease}.node.active .dot{border-color:var(--accent);box-shadow:0 0 28px rgba(103,232,249,.28),inset 0 0 18px rgba(103,232,249,.08)}
+    .node.warn.active .dot{border-color:var(--warn);box-shadow:0 0 28px rgba(251,191,36,.2)}.node.ok.active .dot{border-color:var(--ok);box-shadow:0 0 28px rgba(52,211,153,.2)}
+    .node strong{display:block;font-size:13px}.node small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+    .terminal{margin-top:14px;background:#06101c;border:1px solid #20364f;border-radius:14px;padding:15px 17px;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;min-height:146px;position:relative;overflow:hidden}
+    .terminal:before{content:"●  ●  ●";display:block;color:#47627d;letter-spacing:5px;margin-bottom:9px}.line{opacity:0;transform:translateY(5px);animation:reveal .45s forwards}.line:nth-child(2){animation-delay:.1s}.line:nth-child(3){animation-delay:.3s}.line:nth-child(4){animation-delay:.5s}.line:nth-child(5){animation-delay:.7s}@keyframes reveal{to{opacity:1;transform:none}}
+    .prompt{color:var(--accent)}.good{color:var(--ok)}.yellow{color:var(--warn)}
+    .status{display:grid;gap:10px;margin-top:15px}.badge{display:flex;justify-content:space-between;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:rgba(6,16,28,.5)}.badge span:last-child{font-family:ui-monospace,monospace;color:var(--accent)}
+    .architecture{margin-top:18px;padding:20px}.architecture-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.mini{border:1px solid var(--line);border-radius:15px;padding:14px;background:rgba(6,16,28,.45)}.mini b{display:block;margin-bottom:5px}.mini code{color:var(--accent);font-size:12px}
+    .footer{text-align:center;color:var(--muted);margin-top:24px}.footer a{color:var(--accent);text-decoration:none}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.demo{overflow-x:auto}.architecture-grid{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Codex WIP Continuity</div>
+    <h1>Keep the work.<br/>Lose the session.</h1>
+    <p class="subtitle" data-zh="当 Codex 额度耗尽、切换 API Key / Provider、会话无法访问或更换电脑时，用 Git + 可验证的 WIP 状态恢复工程连续性。" data-en="When Codex usage runs out, authentication/provider changes, a thread becomes inaccessible, or work moves to another machine, recover engineering continuity from Git + verifiable WIP state."></p>
+    <div class="lang"><button id="zhBtn" class="active">中文</button><button id="enBtn">English</button></div>
+  </header>
+
+  <section class="grid">
+    <div class="card demo">
+      <h2 data-zh="交互式工作流演示" data-en="Interactive continuity flow"></h2>
+      <div class="muted" data-zh="点击模式，观察状态如何从旧 Session 转移到新 Session。" data-en="Choose a mode to see how state moves from an old session to a new one."></div>
+      <div class="controls" id="controls">
+        <button data-mode="checkpoint">$wip checkpoint</button>
+        <button data-mode="handoff">$wip handoff</button>
+        <button data-mode="recover" class="active">$wip recover</button>
+        <button data-mode="resume">$wip resume</button>
+      </div>
+      <div style="overflow-x:auto">
+        <div class="flow" id="flow">
+          <div class="track"><div class="pulse"></div></div>
+          <div class="node" data-step="0"><div class="dot">⌘</div><strong>Codex</strong><small data-zh="旧会话" data-en="old session"></small></div>
+          <div class="node" data-step="1"><div class="dot">◫</div><strong>Git</strong><small>worktree</small></div>
+          <div class="node" data-step="2"><div class="dot">◈</div><strong>.codex/wip</strong><small>checkpoint</small></div>
+          <div class="node warn" data-step="3"><div class="dot">!</div><strong data-zh="中断" data-en="Interrupt"></strong><small data-zh="额度 / 登录 / 机器" data-en="quota / auth / machine"></small></div>
+          <div class="node" data-step="4"><div class="dot">⌘</div><strong data-zh="新 Codex" data-en="New Codex"></strong><small>API-K / provider</small></div>
+          <div class="node" data-step="5"><div class="dot">◎</div><strong>Recover</strong><small data-zh="证据验证" data-en="verify evidence"></small></div>
+          <div class="node ok" data-step="6"><div class="dot">✓</div><strong>Resume</strong><small data-zh="继续开发" data-en="continue safely"></small></div>
+        </div>
+      </div>
+      <div class="terminal" id="terminal"></div>
+    </div>
+
+    <aside class="card side">
+      <h2 data-zh="WIP 状态" data-en="WIP state"></h2>
+      <div class="muted" data-zh="代码事实来自 Git；任务连续性来自可验证的 WIP 元数据。" data-en="Code truth comes from Git; task continuity comes from verifiable WIP metadata."></div>
+      <div class="status">
+        <div class="badge"><span>current.md</span><span>intent + next actions</span></div>
+        <div class="badge"><span>state.json</span><span>HEAD + paths + hash</span></div>
+        <div class="badge"><span>checkpoints/</span><span>history</span></div>
+        <div class="badge"><span>secrets</span><span>not persisted</span></div>
+      </div>
+      <p class="muted" style="margin-top:16px" data-zh="Recover 模式不会盲信旧 Agent 的说法，而是按测试、代码、调用关系、Git 历史、WIP 记录的证据强度重新验证。" data-en="Recover mode does not blindly trust the previous agent. It re-validates claims using tests, code, call relationships, Git history, and saved WIP evidence."></p>
+    </aside>
+  </section>
+
+  <section class="card architecture">
+    <h2 data-zh="核心机制" data-en="Core mechanism"></h2>
+    <div class="architecture-grid">
+      <div class="mini"><b>1 · Snapshot</b><span data-zh="记录分支、HEAD、变更路径、diff 统计和 worktree fingerprint。" data-en="Capture branch, HEAD, changed paths, diff statistics, and a worktree fingerprint."></span><br><code>wip_snapshot.py</code></div>
+      <div class="mini"><b>2 · Evidence</b><span data-zh="将结论标记为 VERIFIED / INFERRED / REPORTED / UNKNOWN。" data-en="Label conclusions VERIFIED / INFERRED / REPORTED / UNKNOWN."></span><br><code>current.md</code></div>
+      <div class="mini"><b>3 · Drift guard</b><span data-zh="新 Session 先比较仓库漂移；不一致则先 recover，再 resume。" data-en="A new session checks repository drift first; recover before resume when state diverges."></span><br><code>wip_validate.py</code></div>
+    </div>
+  </section>
+
+  <div class="footer">MuzhiCoder · <a href="https://github.com/MuzhiCoder/codex-wip-skill">github.com/MuzhiCoder/codex-wip-skill</a></div>
+</div>
+<script>
+  const modes={
+    checkpoint:{steps:[0,1,2],zh:['<span class="prompt">$wip checkpoint</span>','读取 Git 工作区与当前任务证据','<span class="good">✓ 写入 .codex/wip/current.md + state.json</span>'],en:['<span class="prompt">$wip checkpoint</span>','Inspect Git worktree and current task evidence','<span class="good">✓ Write .codex/wip/current.md + state.json</span>']},
+    handoff:{steps:[0,1,2,3,4],zh:['<span class="prompt">$wip handoff</span>','刷新 checkpoint 并检查迁移条件','<span class="yellow">→ 切换 Provider / 账号 / 电脑</span>','新 Session 使用同一 Git + WIP 状态'],en:['<span class="prompt">$wip handoff</span>','Refresh checkpoint and validate transfer readiness','<span class="yellow">→ Switch provider / account / machine</span>','New session receives the same Git + WIP state']},
+    recover:{steps:[1,2,3,4,5],zh:['<span class="prompt">$wip recover</span>','旧会话不可访问：冻结业务代码修改','检查 tests → code → call graph → Git → WIP','<span class="good">✓ 重建 VERIFIED / PARTIAL / UNKNOWN 状态</span>','生成精确 Next Actions，然后停止'],en:['<span class="prompt">$wip recover</span>','Old thread unavailable: freeze business-code edits','Inspect tests → code → call graph → Git → WIP','<span class="good">✓ Rebuild VERIFIED / PARTIAL / UNKNOWN state</span>','Generate exact Next Actions, then stop']},
+    resume:{steps:[1,2,4,5,6],zh:['<span class="prompt">$wip resume</span>','比较保存的 HEAD / fingerprint 与当前仓库','如有漂移：先 forensic recover','<span class="good">✓ 从第一个已验证 Next Action 继续</span>'],en:['<span class="prompt">$wip resume</span>','Compare saved HEAD / fingerprint with current repository','If drift exists: run forensic recovery first','<span class="good">✓ Continue from the first verified Next Action</span>']}
+  };
+  let lang='zh',mode='recover';
+  const nodes=[...document.querySelectorAll('.node')],term=document.getElementById('terminal');
+  function translate(){document.querySelectorAll('[data-zh]').forEach(el=>el.textContent=el.dataset[lang]);document.getElementById('zhBtn').classList.toggle('active',lang==='zh');document.getElementById('enBtn').classList.toggle('active',lang==='en');render()}
+  function render(){nodes.forEach((n,i)=>n.classList.toggle('active',modes[mode].steps.includes(i)));term.innerHTML=modes[mode][lang].map((x,i)=>`<div class="line">${i? '  ':''}${x}</div>`).join('');document.querySelectorAll('#controls button').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode))}
+  document.getElementById('zhBtn').onclick=()=>{lang='zh';translate()}; document.getElementById('enBtn').onclick=()=>{lang='en';translate()};
+  document.getElementById('controls').onclick=e=>{if(e.target.dataset.mode){mode=e.target.dataset.mode;render()}};
+  translate();
+</script>
+</body>
+</html>
