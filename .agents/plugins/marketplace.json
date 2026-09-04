@@ -1,0 +1,20 @@
+{
+  "name": "codex-wip-skill",
+  "interface": {
+    "displayName": "MuzhiCoder Codex Plugins"
+  },
+  "plugins": [
+    {
+      "name": "codex-wip",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex-wip"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
