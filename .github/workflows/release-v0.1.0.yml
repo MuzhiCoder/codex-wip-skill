@@ -1,0 +1,53 @@
+name: release-v0.1.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "RELEASES/v0.1.0.md"
+      - ".github/workflows/release-v0.1.0.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate package
+        run: |
+          python scripts/test_wip_snapshot.py
+          python scripts/test_wip_validate.py
+          python scripts/test_plugin_package.py
+
+      - name: Build release archive
+        run: |
+          mkdir -p dist
+          zip -r dist/codex-wip-v0.1.0.zip plugins/codex-wip LICENSE CHANGELOG.md README.md \
+            -x "*/__pycache__/*" "*.pyc"
+          sha256sum dist/codex-wip-v0.1.0.zip > dist/codex-wip-v0.1.0.zip.sha256
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if gh release view v0.1.0 >/dev/null 2>&1; then
+            echo "Release v0.1.0 already exists; leaving it unchanged."
+            exit 0
+          fi
+          gh release create v0.1.0 \
+            dist/codex-wip-v0.1.0.zip \
+            dist/codex-wip-v0.1.0.zip.sha256 \
+            --target "$GITHUB_SHA" \
+            --title "Codex WIP v0.1.0" \
+            --notes-file RELEASES/v0.1.0.md
