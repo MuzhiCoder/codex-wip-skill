@@ -9,6 +9,8 @@
 <br/>
 
 <a href="https://muzhicoder.github.io/codex-wip-skill/">🌐 Interactive Demo / 动画演示</a>
+&nbsp;·&nbsp;
+<a href="https://github.com/openai/codex/issues/42725">📣 Codex Curated Marketplace Review</a>
 
 </div>
 
@@ -18,31 +20,11 @@
 
 ## 中文说明
 
-一个面向 OpenAI Codex 长任务的持久化工作连续性 Skill：支持**检查点（checkpoint）**、**交接（handoff）**、**灾难恢复（forensic recovery）**与**继续执行（resume）**。
+`Codex WIP` 是一个面向 OpenAI Codex 长任务的持久化工作连续性 Skill / Plugin，用于在**额度耗尽、账号或 Provider 切换、旧会话无法访问、崩溃、上下文丢失、换电脑**等情况下保存、恢复并继续工程工作。
 
-### 它解决什么问题
+核心原则：
 
-长时间运行的 Codex 编码任务，往往会形成大量只存在于当前会话中的上下文，例如：已经确认的设计决策、正在处理的缺口、测试状态、失败方案、下一步行动等。
-
-当以下情况发生时，原会话可能无法继续打开：
-
-- Codex 使用额度耗尽；
-- 从 ChatGPT 账号登录切换到 API Key / 自定义 Provider；
-- 使用 CC Switch 切换 Provider；
-- 原 Codex conversation/thread 无法访问；
-- Codex、终端或机器异常退出；
-- 切换到另一台电脑继续开发；
-- 长任务发生上下文压缩或上下文丢失。
-
-此时，**代码通常还在，但“任务状态”可能丢失**。
-
-`$wip` 的目标就是把这些关键工程状态持久化到仓库中，让新的 Codex Session 不依赖旧 conversation，也能够安全恢复并继续开发。
-
-### 核心理念
-
-> Conversation 不是连续性的边界。真正可靠的连续性来源应当是：**Git 仓库 + 可验证的 WIP 状态**。
-
-Git 仍然是代码事实来源；`.codex/wip/current.md` 用于保存当前任务目标、确认过的决策、验证状态、阻塞项和精确的下一步行动。
+> Conversation 不是连续性的边界。真正可靠的连续性来源应当是 **Git 仓库 + 可验证的 WIP 状态**。
 
 ### 支持的模式
 
@@ -50,55 +32,36 @@ Git 仍然是代码事实来源；`.codex/wip/current.md` 用于保存当前任�
 | --- | --- |
 | `$wip checkpoint` | 当前 Session 正常时创建轻量检查点 |
 | `$wip handoff` | 准备切换账号、Provider、Session 或机器 |
-| `$wip recover` | 原会话已经不可访问时，从 Git、测试、代码关系等证据恢复工作状态 |
-| `$wip resume` | 验证现有检查点与当前仓库是否一致，并从已确认的下一步继续 |
-| `$wip status` | 只检查 WIP 是否过期、是否发生仓库漂移，不修改业务代码 |
+| `$wip recover` | 原会话不可访问时，从 Git、测试、代码关系等证据恢复工作状态 |
+| `$wip resume` | 验证检查点与当前仓库是否一致，并继续已确认的下一步 |
+| `$wip status` | 检查 WIP 新鲜度与仓库漂移，不修改业务代码 |
 
-### 动画演示
+### 推荐安装方式：Codex Plugin Marketplace
 
-仓库提供一个交互式 HTML 页面，用动画展示：
+仓库现在已经是一个可直接添加的公开 Codex Marketplace：
 
-```text
-旧 Codex Session
-      ↓
-Git + .codex/wip
-      ↓
-额度耗尽 / Provider 切换 / 换机器
-      ↓
-新 Codex Session
-      ↓
-$wip recover
-      ↓
-$wip resume
+```bash
+codex plugin marketplace add MuzhiCoder/codex-wip-skill --ref main
+codex plugin add codex-wip@codex-wip-skill
 ```
 
-GitHub Pages 启用后可直接访问：
-
-**https://muzhicoder.github.io/codex-wip-skill/**
-
-页面源文件位于：`docs/index.html`。
-
-### 持久化状态
-
-Skill 会在项目中使用：
+安装后请**新建 Codex 会话**，然后验证：
 
 ```text
-.codex/wip/
-├── current.md
-├── state.json
-└── checkpoints/
-    └── <timestamp>.json
+$wip status
 ```
 
-其中：
+Codex App 中也可以进入 **Plugins → Add Marketplace**，填写：
 
-- `current.md`：面向人和新 Codex Session 的任务状态说明；
-- `state.json`：仓库、分支、HEAD、变更文件、worktree fingerprint 等机器可读元数据；
-- `checkpoints/`：历史检查点记录。
+```text
+MuzhiCoder/codex-wip-skill
+```
 
-### 安装
+然后安装 `Codex WIP`。
 
-在 Windows 上：
+### 兼容方式：直接安装 Skill
+
+Windows：
 
 ```powershell
 git clone https://github.com/MuzhiCoder/codex-wip-skill.git
@@ -106,35 +69,19 @@ cd codex-wip-skill
 .\scripts\install.ps1
 ```
 
-也可以手工复制仓库内容到：
+脚本会把正式打包版本中的：
+
+```text
+plugins/codex-wip/skills/wip
+```
+
+安装到：
 
 ```text
 %USERPROFILE%\.codex\skills\wip
 ```
 
-如果设置了 `CODEX_HOME`，安装脚本会使用：
-
-```text
-$env:CODEX_HOME\skills\wip
-```
-
-否则使用：
-
-```text
-$HOME\.codex\skills\wip
-```
-
-安装后，新建一个 Codex Session，并执行：
-
-```text
-$wip status
-```
-
-用于确认 Skill 已被发现。
-
 ### 典型场景：额度耗尽后切换 API Key
-
-例如：
 
 ```text
 ChatGPT Account Codex
@@ -146,27 +93,22 @@ ChatGPT Account Codex
 CC Switch / API Key / Custom Provider
         ↓
 新 Codex Session
-```
-
-如果旧 Session 已经无法继续，在**同一个代码仓库**中新建 Codex Session，然后执行：
-
-```text
+        ↓
 $wip recover
+        ↓
+$wip resume
 ```
 
-恢复流程会先禁止继续修改业务代码，然后检查：
+`recover` 会先冻结业务代码修改，再根据仓库指令、Git 状态、历史、changed tests、生产代码、CodeGraph/代码关系、定向构建测试、ADR/TODO/FIXME，以及用户提供的截图或旧 Agent 输出进行恢复。
 
-1. 仓库中的 `AGENTS.md` 等项目指令；
-2. 已存在的 `.codex/wip/` 状态；
-3. `git status`、Git 历史和 diff 结构；
-4. 新增或修改的测试；
-5. 生产代码变更；
-6. CodeGraph 或其他可用代码关系工具；
-7. 定向构建与测试结果；
-8. ADR、计划文件、TODO / FIXME；
-9. 用户提供的截图或旧 Agent 输出作为辅助证据。
+重要结论使用以下证据等级：
 
-工作项会被分类为：
+- `VERIFIED`
+- `INFERRED`
+- `REPORTED`
+- `UNKNOWN`
+
+工作项使用以下状态：
 
 - `VERIFIED_DONE`
 - `IMPLEMENTED_UNVERIFIED`
@@ -175,172 +117,7 @@ $wip recover
 - `NOT_STARTED`
 - `UNKNOWN`
 
-恢复完成并检查报告后，再执行：
-
-```text
-$wip resume
-```
-
-### 跨 Provider / 跨机器交接
-
-在准备切换 Provider、账号、Session 或机器之前运行：
-
-```text
-$wip handoff
-```
-
-如果迁移到另一台电脑，需要同时迁移：
-
-1. **代码状态**；
-2. **`.codex/wip/` 状态**。
-
-推荐使用用户明确批准的 WIP Git 分支或 WIP commit 进行传输。
-
-Skill **不会自动执行**以下操作：
-
-- `git commit`
-- `git push`
-- `git reset --hard`
-- `git clean`
-- force push
-- Git 历史重写
-
-这些高影响操作始终应由用户明确决定。
-
-### 证据模型
-
-`current.md` 中的重要结论应标记为：
-
-- `VERIFIED`：由测试、可执行行为、代码或权威项目文档直接支持；
-- `INFERRED`：由 diff、调用关系或代码结构强烈推断，但尚未完全证明；
-- `REPORTED`：来自旧 Agent、用户或截图，但尚未独立验证；
-- `UNKNOWN`：当前证据不足。
-
-这可以避免新的 Codex Session 把旧 handoff 中的推测误当成事实。
-
-### 安全设计
-
-`wip_snapshot.py` 默认只保存元数据，不持久化：
-
-- 完整 diff 内容；
-- 业务文件正文；
-- 环境变量值；
-- API Key；
-- Access Token；
-- Cookie；
-- 密码；
-- Authorization Header。
-
-`wip_validate.py` 还会检查 `current.md` 中若干常见 Secret 标记。
-
-### 测试
-
-本地执行：
-
-```powershell
-python scripts/test_wip_snapshot.py
-python scripts/test_wip_validate.py
-```
-
-GitHub Actions 会在 Windows 和 Linux 上，使用 Python 3.11–3.13 运行同一套测试。
-
-### 仓库结构
-
-```text
-.
-├── .github/workflows/
-│   ├── test.yml
-│   └── pages.yml
-├── docs/
-│   └── index.html
-├── SKILL.md
-├── agents/
-│   └── openai.yaml
-├── examples/
-│   └── codex-wip.example.md
-├── references/
-│   ├── handoff-protocol.md
-│   ├── recovery-protocol.md
-│   └── wip-contract.md
-└── scripts/
-    ├── install.ps1
-    ├── wip_snapshot.py
-    ├── wip_validate.py
-    ├── test_wip_snapshot.py
-    └── test_wip_validate.py
-```
-
-### 推荐使用方式
-
-不要等到额度已经耗尽才第一次保存 WIP。
-
-建议在重要里程碑运行 `$wip checkpoint`，例如：RED 测试建立目标行为、GREEN 实现通过、重要 blocker 已解决、架构决策发生变化、一个迁移/重构阶段完成、准备切换 Provider/电脑，或剩余额度已经低到可能影响任务连续性。
-
-这样，即使之后发生硬中断，也只需要恢复“最后一个 checkpoint 之后”的少量工作。
-
-<div align="center"><a href="#english">Go to English ↓</a></div>
-
----
-
-<a id="english"></a>
-
-## English
-
-A durable work-continuity Skill for long-running OpenAI Codex coding sessions, providing **checkpoint**, **handoff**, **forensic recovery**, and **resume** workflows.
-
-### What problem does it solve?
-
-Long-running Codex coding tasks accumulate valuable session-only context: confirmed design decisions, unfinished gaps, test status, rejected approaches, blockers, and exact next actions.
-
-The original conversation may become unavailable when Codex usage limits are exhausted, authentication changes from a ChatGPT account to an API key or custom provider, CC Switch changes providers, the original thread becomes inaccessible, a machine crashes, development moves to another computer, or a long task loses context.
-
-In these cases, **the code may still exist while the task state is lost**.
-
-`$wip` persists that engineering state inside the repository so a fresh Codex session can recover and continue without depending on the original conversation.
-
-### Core idea
-
-> Conversation identity is not the continuity boundary. Reliable continuity should come from the **Git repository + verifiable WIP state**.
-
-Git remains the source of truth for code. `.codex/wip/current.md` stores the durable task goal, confirmed decisions, verification state, blockers, and exact next actions.
-
-### Modes
-
-| Command | Purpose |
-| --- | --- |
-| `$wip checkpoint` | Persist a lightweight checkpoint while the current session is healthy |
-| `$wip handoff` | Prepare for a provider/account/session/machine handoff |
-| `$wip recover` | Reconstruct state from Git, tests, code relationships, and other evidence after a hard interruption |
-| `$wip resume` | Validate checkpoint freshness against the repository and continue from the first verified next action |
-| `$wip status` | Report checkpoint freshness and repository drift without changing business code |
-
-### Interactive demo
-
-The repository includes an animated HTML demo of the continuity flow:
-
-```text
-Old Codex Session
-      ↓
-Git + .codex/wip
-      ↓
-Usage exhausted / provider switch / machine migration
-      ↓
-New Codex Session
-      ↓
-$wip recover
-      ↓
-$wip resume
-```
-
-After GitHub Pages is enabled, open:
-
-**https://muzhicoder.github.io/codex-wip-skill/**
-
-Source: `docs/index.html`.
-
-### Durable project state
-
-The skill stores continuity metadata under:
+### 持久化状态
 
 ```text
 .codex/wip/
@@ -350,11 +127,126 @@ The skill stores continuity metadata under:
     └── <timestamp>.json
 ```
 
-- `current.md`: human-readable continuity record for users and new Codex sessions;
-- `state.json`: machine-readable repository metadata such as branch, HEAD, changed paths, and worktree fingerprint;
-- `checkpoints/`: historical checkpoint metadata.
+- `current.md`：面向用户和新 Codex Session 的可读任务状态；
+- `state.json`：branch、HEAD、changed paths、worktree fingerprint 等机器可读元数据；
+- `checkpoints/`：历史检查点。
 
-### Install
+### 安全设计
+
+默认快照是 metadata-only，不持久化完整 diff、业务文件正文、环境变量值、API Key、Access Token、Cookie、密码或 Authorization Header。
+
+Skill 不会在恢复流程中自动执行：
+
+- `git reset --hard`
+- `git clean`
+- force push
+- Git 历史重写
+- 未经用户明确要求的 `git commit` / `git push`
+
+### Codex 社区发布状态
+
+当前项目已经具备原生 Codex Plugin / Marketplace 结构，并且任何用户都可以通过本仓库公开 Marketplace 安装。
+
+同时已经向 OpenAI Codex 官方仓库提交 curated marketplace review 请求：
+
+**https://github.com/openai/codex/issues/42725**
+
+公开 Plugin Directory / 官方 curated marketplace 是否收录由 OpenAI 审核决定；提交 review 不代表已经被官方目录收录。
+
+### 动画演示
+
+**https://muzhicoder.github.io/codex-wip-skill/**
+
+页面源文件：`docs/index.html`。
+
+### 仓库结构
+
+```text
+.
+├── .agents/plugins/marketplace.json
+├── .github/workflows/
+│   ├── test.yml
+│   └── pages.yml
+├── docs/
+│   └── index.html
+├── plugins/
+│   └── codex-wip/
+│       ├── .codex-plugin/plugin.json
+│       ├── README.md
+│       └── skills/
+│           └── wip/
+│               ├── SKILL.md
+│               ├── agents/
+│               ├── references/
+│               └── scripts/
+├── SKILL.md                 # legacy direct-skill mirror
+├── agents/                  # legacy mirror
+├── references/              # legacy mirror
+└── scripts/
+    ├── install.ps1
+    ├── wip_snapshot.py
+    ├── wip_validate.py
+    ├── test_wip_snapshot.py
+    ├── test_wip_validate.py
+    └── test_plugin_package.py
+```
+
+### 推荐工作流
+
+不要等到额度已经耗尽才第一次保存 WIP。建议在 RED、GREEN、重要 blocker 解决、架构决策变化、迁移阶段完成、上下文压缩前、Provider/机器切换前，以及剩余额度已经可能影响连续性时执行：
+
+```text
+$wip checkpoint
+```
+
+<div align="center"><a href="#english">Go to English ↓</a></div>
+
+---
+
+<a id="english"></a>
+
+## English
+
+`Codex WIP` is a durable continuity Skill / Plugin for long-running OpenAI Codex coding work. It helps preserve, reconstruct, and resume engineering state when usage limits are exhausted, authentication or providers change, the original conversation becomes inaccessible, a crash occurs, context is lost, or development moves to another machine.
+
+Core principle:
+
+> Conversation identity is not the continuity boundary. Reliable continuity should come from the **Git repository + verifiable WIP state**.
+
+### Modes
+
+| Command | Purpose |
+| --- | --- |
+| `$wip checkpoint` | Persist a lightweight checkpoint while the current session is healthy |
+| `$wip handoff` | Prepare for a provider/account/session/machine handoff |
+| `$wip recover` | Reconstruct interrupted work from Git, tests, code relationships, and other evidence |
+| `$wip resume` | Validate checkpoint freshness and continue from the first verified next action |
+| `$wip status` | Report checkpoint freshness and repository drift without changing business code |
+
+### Recommended install: Codex Plugin Marketplace
+
+This repository is now a public Codex marketplace:
+
+```bash
+codex plugin marketplace add MuzhiCoder/codex-wip-skill --ref main
+codex plugin add codex-wip@codex-wip-skill
+```
+
+Start a **new Codex thread** after installation and verify:
+
+```text
+$wip status
+```
+
+In the Codex App you can also open **Plugins → Add Marketplace**, enter:
+
+```text
+MuzhiCoder/codex-wip-skill
+```
+
+and install `Codex WIP`.
+
+### Compatibility install: direct Skill
 
 On Windows:
 
@@ -364,68 +256,90 @@ cd codex-wip-skill
 .\scripts\install.ps1
 ```
 
-Or copy the repository contents manually to `%USERPROFILE%\.codex\skills\wip`.
+The installer copies the canonical packaged skill from `plugins/codex-wip/skills/wip` into `%USERPROFILE%\.codex\skills\wip`.
 
-After installation, start a fresh Codex session and verify discovery with:
-
-```text
-$wip status
-```
-
-### Typical scenario: usage exhausted, then switch to API key
-
-If the previous session can no longer continue, open a new Codex session in the **same repository** and run:
+### Typical scenario: usage exhausted, then switch provider
 
 ```text
+ChatGPT Account Codex
+        ↓
+Long-running coding task
+        ↓
+Usage exhausted / original thread unavailable
+        ↓
+CC Switch / API Key / Custom Provider
+        ↓
+New Codex Session
+        ↓
 $wip recover
-```
-
-Recovery freezes business-code edits first, then inspects repository instructions, existing WIP state, Git history and diff structure, changed tests, changed production code, CodeGraph or other code-intelligence tools, targeted build/test evidence, ADRs/TODOs/FIXMEs, and user-provided screenshots or previous-agent output as supporting evidence.
-
-Work items are classified as `VERIFIED_DONE`, `IMPLEMENTED_UNVERIFIED`, `PARTIAL`, `BLOCKED`, `NOT_STARTED`, or `UNKNOWN`.
-
-After reviewing the recovery report, continue with:
-
-```text
+        ↓
 $wip resume
 ```
 
-### Cross-provider / cross-machine handoff
+Recovery freezes business-code edits first, then reconstructs state from repository instructions, Git state/history, changed tests, production code, CodeGraph or other code-intelligence evidence, targeted build/test results, ADRs/TODOs/FIXMEs, and user-provided screenshots or previous-agent output.
 
-Before switching provider, account, session, or machine, run `$wip handoff`.
+Evidence labels:
 
-For another machine, transfer both the **code state** and **`.codex/wip/` state**. A user-approved WIP Git branch or WIP commit is the preferred transport when practical.
+- `VERIFIED`
+- `INFERRED`
+- `REPORTED`
+- `UNKNOWN`
 
-The skill does **not** automatically run `git commit`, `git push`, `git reset --hard`, `git clean`, force push, or Git history rewrites.
+Work-item states:
 
-### Evidence model
+- `VERIFIED_DONE`
+- `IMPLEMENTED_UNVERIFIED`
+- `PARTIAL`
+- `BLOCKED`
+- `NOT_STARTED`
+- `UNKNOWN`
 
-Important claims in `current.md` are labeled as:
+### Durable state
 
-- `VERIFIED` — directly supported by tests, executable behavior, code, or authoritative project documentation;
-- `INFERRED` — strongly suggested by code, diff, or call graph but not yet fully proven;
-- `REPORTED` — supplied by a previous agent, user, or screenshot but not independently verified;
-- `UNKNOWN` — insufficient evidence.
+```text
+.codex/wip/
+├── current.md
+├── state.json
+└── checkpoints/
+    └── <timestamp>.json
+```
+
+Git remains the source of truth for code. `current.md` stores durable intent, decisions, verification state, blockers, and exact next actions.
 
 ### Security
 
-`wip_snapshot.py` is metadata-only by default. It does not persist raw diff contents, business file contents, environment-variable values, API keys, access tokens, cookies, passwords, or authorization headers.
+Snapshots are metadata-only by default. They do not persist raw diffs, business file contents, environment-variable values, API keys, access tokens, cookies, passwords, or authorization headers.
 
-`wip_validate.py` also checks `current.md` for several common secret markers.
+The recovery workflow does not automatically run destructive Git operations, force pushes, history rewrites, commits, or pushes without explicit user intent.
 
-### Tests
+### Codex community publishing status
+
+The project now ships a native Codex plugin manifest and a public marketplace that anyone can add directly from this repository.
+
+A curated marketplace review request has also been submitted to the official OpenAI Codex repository:
+
+**https://github.com/openai/codex/issues/42725**
+
+Submission for review does not mean the plugin is already listed in the universal public Plugin Directory or official curated marketplace; inclusion is controlled by OpenAI review.
+
+### Interactive demo
+
+**https://muzhicoder.github.io/codex-wip-skill/**
+
+Source: `docs/index.html`.
+
+### Validation
 
 ```powershell
 python scripts/test_wip_snapshot.py
 python scripts/test_wip_validate.py
+python scripts/test_plugin_package.py
 ```
 
-GitHub Actions runs the test suite on Windows and Linux with Python 3.11–3.13.
+GitHub Actions runs the suite on Windows and Linux with Python 3.11–3.13.
 
 ### Recommended workflow
 
-Do not wait until usage is fully exhausted before creating the first WIP record. Run `$wip checkpoint` at meaningful milestones: after a RED test, after GREEN, after removing a blocker, after an architectural decision, before a provider/machine switch, or when the remaining usage limit becomes operationally risky.
-
-That way, a hard interruption only requires reconstructing the small amount of work after the most recent checkpoint.
+Checkpoint at meaningful milestones: after RED, after GREEN, after removing a blocker, after an architectural decision, before expected context compaction, before switching providers/machines, or when the remaining usage limit becomes operationally risky.
 
 <div align="center"><a href="#zh-cn">↑ 返回中文 / Back to Chinese</a></div>
