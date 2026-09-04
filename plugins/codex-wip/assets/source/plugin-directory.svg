@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef4ff"/><stop offset="0.55" stop-color="#ffffff"/><stop offset="1" stop-color="#f3e8ff"/></linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#172554"/><stop offset="1" stop-color="#312e81"/></linearGradient>
+    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#0f172a" flood-opacity="0.14"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#page)"/>
+  <text x="80" y="82" font-family="Inter,Segoe UI,Arial" font-size="23" font-weight="700" fill="#0f172a">Codex Plugin Directory</text>
+  <text x="1510" y="80" text-anchor="end" font-family="Inter,Segoe UI,Arial" font-size="16" fill="#64748b">Illustrative preview · v0.1.0</text>
+
+  <rect x="68" y="118" width="1464" height="690" rx="32" fill="#111827" filter="url(#shadow)"/>
+  <rect x="68" y="118" width="280" height="690" rx="32" fill="#0b1220"/>
+  <rect x="320" y="118" width="28" height="690" fill="#0b1220"/>
+  <text x="112" y="178" font-family="Inter,Segoe UI,Arial" font-size="22" font-weight="700" fill="#f8fafc">Codex</text>
+  <g font-family="Inter,Segoe UI,Arial" font-size="18" fill="#94a3b8">
+    <text x="116" y="248">Discover</text><text x="116" y="304">Installed</text><text x="116" y="360">Add Marketplace</text><text x="116" y="416">Settings</text>
+  </g>
+  <rect x="94" y="326" width="226" height="52" rx="12" fill="#1d4ed8" opacity="0.34"/>
+  <circle cx="110" cy="353" r="5" fill="#60a5fa"/>
+
+  <text x="404" y="182" font-family="Inter,Segoe UI,Arial" font-size="34" font-weight="750" fill="#f8fafc">Community plugins</text>
+  <rect x="404" y="214" width="520" height="54" rx="14" fill="#1f2937" stroke="#334155"/>
+  <text x="438" y="248" font-family="Inter,Segoe UI,Arial" font-size="18" fill="#94a3b8">Search plugins…</text>
+  <g font-family="Inter,Segoe UI,Arial" font-size="15" fill="#94a3b8"><text x="404" y="304">All</text><text x="455" y="304">Community</text><text x="565" y="304">Developer Tools</text></g>
+
+  <rect x="404" y="338" width="590" height="300" rx="24" fill="#172033" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="438" y="382" width="104" height="104" rx="28" fill="url(#brand)"/>
+  <path d="M462 440c-13-13-13-34 0-47 13-13 34-13 47 0l30 30c8 8 8 20 0 28-8 8-20 8-28 0l-30-30c-5-5-13-5-18 0-5 5-5 13 0 18 5 5 13 5 18 0l30-30" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+  <path d="M514 457l17 2-2-17-5 5-10 10z" fill="#c7d2fe"/>
+  <path d="M522 392l4 9 9 4-9 4-4 9-4-9-9-4 9-4 4-9z" fill="#a78bfa"/>
+  <text x="570" y="402" font-family="Inter,Segoe UI,Arial" font-size="30" font-weight="750" fill="#f8fafc">Codex WIP</text>
+  <text x="570" y="434" font-family="Inter,Segoe UI,Arial" font-size="17" fill="#94a3b8">By MuzhiCoder · Developer Tools</text>
+  <text x="570" y="478" font-family="Inter,Segoe UI,Arial" font-size="19" fill="#cbd5e1">Durable checkpoint, handoff, forensic recovery,</text>
+  <text x="570" y="507" font-family="Inter,Segoe UI,Arial" font-size="19" fill="#cbd5e1">and safe resume for interrupted Codex work.</text>
+  <g font-family="Inter,Segoe UI,Arial" font-size="15" font-weight="650">
+    <rect x="570" y="545" width="114" height="34" rx="17" fill="#1e3a8a"/><text x="627" y="568" text-anchor="middle" fill="#bfdbfe">checkpoint</text>
+    <rect x="696" y="545" width="98" height="34" rx="17" fill="#4c1d95"/><text x="745" y="568" text-anchor="middle" fill="#ddd6fe">handoff</text>
+    <rect x="806" y="545" width="102" height="34" rx="17" fill="#065f46"/><text x="857" y="568" text-anchor="middle" fill="#a7f3d0">recovery</text>
+  </g>
+  <rect x="842" y="394" width="112" height="48" rx="14" fill="url(#cta)"/><text x="898" y="425" text-anchor="middle" font-family="Inter,Segoe UI,Arial" font-size="18" font-weight="700" fill="#fff">Install</text>
+
+  <rect x="1040" y="338" width="430" height="300" rx="24" fill="#f8fafc"/>
+  <text x="1080" y="392" font-family="Inter,Segoe UI,Arial" font-size="28" font-weight="750" fill="#0f172a">Plugin details</text>
+  <text x="1080" y="432" font-family="Inter,Segoe UI,Arial" font-size="17" fill="#475569">Recover work when a thread, provider,</text>
+  <text x="1080" y="458" font-family="Inter,Segoe UI,Arial" font-size="17" fill="#475569">or machine changes unexpectedly.</text>
+  <g font-family="Inter,Segoe UI,Arial" font-size="16" fill="#1e293b">
+    <text x="1080" y="512">✓ Metadata-only checkpoints</text><text x="1080" y="548">✓ Git-grounded recovery</text><text x="1080" y="584">✓ Cross-provider handoff</text><text x="1080" y="620">✓ Explicit safety guardrails</text>
+  </g>
+
+  <g font-family="Inter,Segoe UI,Arial">
+    <text x="405" y="706" font-size="19" font-weight="700" fill="#e2e8f0">Starter prompts</text>
+    <rect x="404" y="730" width="1066" height="48" rx="14" fill="#1f2937"/>
+    <text x="430" y="760" font-size="16" fill="#cbd5e1">Recover this interrupted coding task from the current Git state.</text>
+  </g>
+
+  <text x="80" y="856" font-family="Inter,Segoe UI,Arial" font-size="18" fill="#475569">Codex WIP · Community plugin · MIT License · github.com/MuzhiCoder/codex-wip-skill</text>
+</svg>
