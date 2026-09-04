@@ -1,14 +1,24 @@
 # Codex WIP Skill
 
-**中文 | English**
+<div align="center">
 
-一个面向 OpenAI Codex 长任务的持久化工作连续性 Skill：支持**检查点（checkpoint）**、**交接（handoff）**、**灾难恢复（forensic recovery）**与**继续执行（resume）**。
+**Durable checkpoint · Handoff · Forensic recovery · Resume for OpenAI Codex**
 
-A durable work-continuity Skill for long-running OpenAI Codex coding sessions, providing **checkpoint**, **handoff**, **forensic recovery**, and **resume** workflows.
+<a href="#zh-cn">中文</a> | <a href="#english">English</a>
+
+<br/>
+
+<a href="https://muzhicoder.github.io/codex-wip-skill/">🌐 Interactive Demo / 动画演示</a>
+
+</div>
 
 ---
 
+<a id="zh-cn"></a>
+
 ## 中文说明
+
+一个面向 OpenAI Codex 长任务的持久化工作连续性 Skill：支持**检查点（checkpoint）**、**交接（handoff）**、**灾难恢复（forensic recovery）**与**继续执行（resume）**。
 
 ### 它解决什么问题
 
@@ -43,6 +53,30 @@ Git 仍然是代码事实来源；`.codex/wip/current.md` 用于保存当前任�
 | `$wip recover` | 原会话已经不可访问时，从 Git、测试、代码关系等证据恢复工作状态 |
 | `$wip resume` | 验证现有检查点与当前仓库是否一致，并从已确认的下一步继续 |
 | `$wip status` | 只检查 WIP 是否过期、是否发生仓库漂移，不修改业务代码 |
+
+### 动画演示
+
+仓库提供一个交互式 HTML 页面，用动画展示：
+
+```text
+旧 Codex Session
+      ↓
+Git + .codex/wip
+      ↓
+额度耗尽 / Provider 切换 / 换机器
+      ↓
+新 Codex Session
+      ↓
+$wip recover
+      ↓
+$wip resume
+```
+
+GitHub Pages 启用后可直接访问：
+
+**https://muzhicoder.github.io/codex-wip-skill/**
+
+页面源文件位于：`docs/index.html`。
 
 ### 持久化状态
 
@@ -214,7 +248,11 @@ GitHub Actions 会在 Windows 和 Linux 上，使用 Python 3.11–3.13 运行�
 
 ```text
 .
-├── .github/workflows/test.yml
+├── .github/workflows/
+│   ├── test.yml
+│   └── pages.yml
+├── docs/
+│   └── index.html
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
@@ -236,43 +274,25 @@ GitHub Actions 会在 Windows 和 Linux 上，使用 Python 3.11–3.13 运行�
 
 不要等到额度已经耗尽才第一次保存 WIP。
 
-建议在以下里程碑运行：
-
-```text
-$wip checkpoint
-```
-
-例如：
-
-- RED 测试已经建立目标行为；
-- GREEN 实现已经通过；
-- 一个重要 blocker 已解决；
-- 架构决策发生变化；
-- 一个迁移/重构阶段完成；
-- 准备进行长时间、高风险操作；
-- 准备切换 Provider；
-- 准备切换电脑；
-- 剩余额度已经低到可能影响任务连续性。
+建议在重要里程碑运行 `$wip checkpoint`，例如：RED 测试建立目标行为、GREEN 实现通过、重要 blocker 已解决、架构决策发生变化、一个迁移/重构阶段完成、准备切换 Provider/电脑，或剩余额度已经低到可能影响任务连续性。
 
 这样，即使之后发生硬中断，也只需要恢复“最后一个 checkpoint 之后”的少量工作。
 
+<div align="center"><a href="#english">Go to English ↓</a></div>
+
 ---
 
+<a id="english"></a>
+
 ## English
+
+A durable work-continuity Skill for long-running OpenAI Codex coding sessions, providing **checkpoint**, **handoff**, **forensic recovery**, and **resume** workflows.
 
 ### What problem does it solve?
 
 Long-running Codex coding tasks accumulate valuable session-only context: confirmed design decisions, unfinished gaps, test status, rejected approaches, blockers, and exact next actions.
 
-The original conversation may become unavailable when:
-
-- Codex usage limits are exhausted;
-- authentication changes from a ChatGPT account to an API key or custom provider;
-- CC Switch is used to change providers;
-- the original Codex conversation/thread becomes inaccessible;
-- Codex, the terminal, or the machine crashes;
-- development moves to another computer;
-- a long task loses context or undergoes context compaction.
+The original conversation may become unavailable when Codex usage limits are exhausted, authentication changes from a ChatGPT account to an API key or custom provider, CC Switch changes providers, the original thread becomes inaccessible, a machine crashes, development moves to another computer, or a long task loses context.
 
 In these cases, **the code may still exist while the task state is lost**.
 
@@ -293,6 +313,30 @@ Git remains the source of truth for code. `.codex/wip/current.md` stores the dur
 | `$wip recover` | Reconstruct state from Git, tests, code relationships, and other evidence after a hard interruption |
 | `$wip resume` | Validate checkpoint freshness against the repository and continue from the first verified next action |
 | `$wip status` | Report checkpoint freshness and repository drift without changing business code |
+
+### Interactive demo
+
+The repository includes an animated HTML demo of the continuity flow:
+
+```text
+Old Codex Session
+      ↓
+Git + .codex/wip
+      ↓
+Usage exhausted / provider switch / machine migration
+      ↓
+New Codex Session
+      ↓
+$wip recover
+      ↓
+$wip resume
+```
+
+After GitHub Pages is enabled, open:
+
+**https://muzhicoder.github.io/codex-wip-skill/**
+
+Source: `docs/index.html`.
 
 ### Durable project state
 
@@ -320,23 +364,7 @@ cd codex-wip-skill
 .\scripts\install.ps1
 ```
 
-Or copy the repository contents manually to:
-
-```text
-%USERPROFILE%\.codex\skills\wip
-```
-
-If `CODEX_HOME` is set, the installer uses:
-
-```text
-$env:CODEX_HOME\skills\wip
-```
-
-Otherwise it uses:
-
-```text
-$HOME\.codex\skills\wip
-```
+Or copy the repository contents manually to `%USERPROFILE%\.codex\skills\wip`.
 
 After installation, start a fresh Codex session and verify discovery with:
 
@@ -346,46 +374,15 @@ $wip status
 
 ### Typical scenario: usage exhausted, then switch to API key
 
-Example:
-
-```text
-ChatGPT Account Codex
-        ↓
-Long-running development task
-        ↓
-Usage exhausted / original session unavailable
-        ↓
-CC Switch / API Key / Custom Provider
-        ↓
-New Codex Session
-```
-
 If the previous session can no longer continue, open a new Codex session in the **same repository** and run:
 
 ```text
 $wip recover
 ```
 
-Recovery first freezes business-code edits, then inspects:
+Recovery freezes business-code edits first, then inspects repository instructions, existing WIP state, Git history and diff structure, changed tests, changed production code, CodeGraph or other code-intelligence tools, targeted build/test evidence, ADRs/TODOs/FIXMEs, and user-provided screenshots or previous-agent output as supporting evidence.
 
-1. repository instructions such as `AGENTS.md`;
-2. existing `.codex/wip/` state;
-3. `git status`, Git history, and diff structure;
-4. changed or added tests;
-5. changed production code;
-6. CodeGraph or other available code-intelligence tools;
-7. targeted build and test evidence;
-8. ADRs, plan files, TODOs, and FIXMEs;
-9. user-provided screenshots or previous-agent output as supporting evidence.
-
-Work items are classified as:
-
-- `VERIFIED_DONE`
-- `IMPLEMENTED_UNVERIFIED`
-- `PARTIAL`
-- `BLOCKED`
-- `NOT_STARTED`
-- `UNKNOWN`
+Work items are classified as `VERIFIED_DONE`, `IMPLEMENTED_UNVERIFIED`, `PARTIAL`, `BLOCKED`, `NOT_STARTED`, or `UNKNOWN`.
 
 After reviewing the recovery report, continue with:
 
@@ -395,29 +392,11 @@ $wip resume
 
 ### Cross-provider / cross-machine handoff
 
-Before switching provider, account, session, or machine, run:
+Before switching provider, account, session, or machine, run `$wip handoff`.
 
-```text
-$wip handoff
-```
+For another machine, transfer both the **code state** and **`.codex/wip/` state**. A user-approved WIP Git branch or WIP commit is the preferred transport when practical.
 
-For another machine, transfer both:
-
-1. **code state**; and
-2. **`.codex/wip/` state**.
-
-A user-approved WIP Git branch or WIP commit is the preferred transport when practical.
-
-The skill does **not** automatically run:
-
-- `git commit`
-- `git push`
-- `git reset --hard`
-- `git clean`
-- force push
-- Git history rewrites
-
-High-impact Git actions remain explicit user decisions.
+The skill does **not** automatically run `git commit`, `git push`, `git reset --hard`, `git clean`, force push, or Git history rewrites.
 
 ### Evidence model
 
@@ -428,76 +407,25 @@ Important claims in `current.md` are labeled as:
 - `REPORTED` — supplied by a previous agent, user, or screenshot but not independently verified;
 - `UNKNOWN` — insufficient evidence.
 
-This prevents a recovered session from blindly trusting stale or speculative handoff notes.
-
 ### Security
 
-`wip_snapshot.py` is metadata-only by default. It does not persist:
-
-- raw diff contents;
-- business file contents;
-- environment-variable values;
-- API keys;
-- access tokens;
-- cookies;
-- passwords;
-- authorization headers.
+`wip_snapshot.py` is metadata-only by default. It does not persist raw diff contents, business file contents, environment-variable values, API keys, access tokens, cookies, passwords, or authorization headers.
 
 `wip_validate.py` also checks `current.md` for several common secret markers.
 
 ### Tests
-
-Run locally:
 
 ```powershell
 python scripts/test_wip_snapshot.py
 python scripts/test_wip_validate.py
 ```
 
-GitHub Actions runs the same test suite on Windows and Linux with Python 3.11–3.13.
-
-### Repository layout
-
-```text
-.
-├── .github/workflows/test.yml
-├── SKILL.md
-├── agents/
-│   └── openai.yaml
-├── examples/
-│   └── codex-wip.example.md
-├── references/
-│   ├── handoff-protocol.md
-│   ├── recovery-protocol.md
-│   └── wip-contract.md
-└── scripts/
-    ├── install.ps1
-    ├── wip_snapshot.py
-    ├── wip_validate.py
-    ├── test_wip_snapshot.py
-    └── test_wip_validate.py
-```
+GitHub Actions runs the test suite on Windows and Linux with Python 3.11–3.13.
 
 ### Recommended workflow
 
-Do not wait until usage is fully exhausted before creating the first WIP record.
+Do not wait until usage is fully exhausted before creating the first WIP record. Run `$wip checkpoint` at meaningful milestones: after a RED test, after GREEN, after removing a blocker, after an architectural decision, before a provider/machine switch, or when the remaining usage limit becomes operationally risky.
 
-Run:
+That way, a hard interruption only requires reconstructing the small amount of work after the most recent checkpoint.
 
-```text
-$wip checkpoint
-```
-
-at meaningful milestones such as:
-
-- a RED test establishes target behavior;
-- the GREEN implementation passes;
-- an important blocker is removed;
-- an architectural decision changes;
-- a migration/refactor phase completes;
-- before a long or risky operation;
-- before switching providers;
-- before switching machines;
-- when remaining usage becomes operationally risky.
-
-With periodic checkpoints, a hard interruption only requires recovering the small amount of work performed after the latest checkpoint.
+<div align="center"><a href="#zh-cn">↑ 返回中文 / Back to Chinese</a></div>
