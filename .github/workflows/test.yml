@@ -23,3 +23,5 @@ jobs:
         run: python scripts/test_wip_snapshot.py
       - name: Validator tests
         run: python scripts/test_wip_validate.py
+      - name: Plugin package tests
+        run: python scripts/test_plugin_package.py
