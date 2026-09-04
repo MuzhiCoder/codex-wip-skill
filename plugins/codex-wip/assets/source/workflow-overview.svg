@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef2ff"/><stop offset="0.55" stop-color="#ffffff"/><stop offset="1" stop-color="#ecfeff"/></linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0f172a" flood-opacity="0.13"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#page)"/>
+  <text x="76" y="78" font-family="Inter,Segoe UI,Arial" font-size="38" font-weight="800" fill="#0f172a">From interruption to continuation</text>
+  <text x="76" y="116" font-family="Inter,Segoe UI,Arial" font-size="20" fill="#64748b">Codex WIP keeps engineering state in Git + verifiable WIP artifacts, not in one fragile conversation.</text>
+  <text x="1510" y="80" text-anchor="end" font-family="Inter,Segoe UI,Arial" font-size="16" fill="#64748b">Illustrative workflow preview · v0.1.0</text>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="170" width="440" height="530" rx="28" fill="#111827"/>
+    <rect x="580" y="170" width="440" height="530" rx="28" fill="#111827"/>
+    <rect x="1090" y="170" width="440" height="530" rx="28" fill="#111827"/>
+  </g>
+
+  <g font-family="Inter,Segoe UI,Arial">
+    <circle cx="110" cy="212" r="22" fill="#2563eb"/><text x="110" y="220" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">1</text>
+    <text x="150" y="220" font-size="25" font-weight="750" fill="#f8fafc">Checkpoint</text>
+    <text x="105" y="280" font-family="Consolas,Menlo,monospace" font-size="20" fill="#93c5fd">$wip checkpoint</text>
+    <text x="105" y="330" font-family="Consolas,Menlo,monospace" font-size="17" fill="#86efac">✓ WIP checkpoint created</text>
+    <text x="105" y="370" font-family="Consolas,Menlo,monospace" font-size="16" fill="#cbd5e1">branch: feature/hdfs2obs</text>
+    <text x="105" y="400" font-family="Consolas,Menlo,monospace" font-size="16" fill="#cbd5e1">head: a3f9c2e</text>
+    <text x="105" y="430" font-family="Consolas,Menlo,monospace" font-size="16" fill="#cbd5e1">changed: 26 files</text>
+    <text x="105" y="460" font-family="Consolas,Menlo,monospace" font-size="16" fill="#cbd5e1">fingerprint: 6b2f…19d0</text>
+    <rect x="105" y="510" width="350" height="110" rx="16" fill="#1f2937"/>
+    <text x="130" y="545" font-size="16" font-weight="700" fill="#e2e8f0">Durable state</text>
+    <text x="130" y="575" font-size="15" fill="#94a3b8">.codex/wip/current.md</text>
+    <text x="130" y="603" font-size="15" fill="#94a3b8">.codex/wip/state.json</text>
+
+    <circle cx="620" cy="212" r="22" fill="#7c3aed"/><text x="620" y="220" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">2</text>
+    <text x="660" y="220" font-size="25" font-weight="750" fill="#f8fafc">Handoff</text>
+    <text x="615" y="278" font-size="18" fill="#cbd5e1">Usage limit, account, provider,</text>
+    <text x="615" y="306" font-size="18" fill="#cbd5e1">session, or machine changes.</text>
+    <path d="M660 390h250" stroke="#818cf8" stroke-width="8" stroke-linecap="round"/>
+    <path d="M890 368l28 22-28 22" fill="none" stroke="#818cf8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="625" y="340" width="110" height="94" rx="20" fill="#1e3a8a"/><text x="680" y="378" text-anchor="middle" font-size="15" fill="#bfdbfe">ChatGPT</text><text x="680" y="404" text-anchor="middle" font-size="15" fill="#bfdbfe">account</text>
+    <rect x="850" y="340" width="110" height="94" rx="20" fill="#4c1d95"/><text x="905" y="378" text-anchor="middle" font-size="15" fill="#ddd6fe">API key /</text><text x="905" y="404" text-anchor="middle" font-size="15" fill="#ddd6fe">provider</text>
+    <rect x="615" y="510" width="370" height="110" rx="16" fill="#1f2937"/>
+    <text x="640" y="545" font-size="16" font-weight="700" fill="#e2e8f0">Transfer the work, not the thread</text>
+    <text x="640" y="575" font-size="15" fill="#94a3b8">Git tree + WIP evidence + tests</text>
+    <text x="640" y="603" font-size="15" fill="#94a3b8">remain the continuity boundary.</text>
+
+    <circle cx="1130" cy="212" r="22" fill="#059669"/><text x="1130" y="220" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">3</text>
+    <text x="1170" y="220" font-size="25" font-weight="750" fill="#f8fafc">Recover &amp; Resume</text>
+    <text x="1125" y="280" font-family="Consolas,Menlo,monospace" font-size="20" fill="#93c5fd">$wip recover</text>
+    <text x="1125" y="330" font-family="Consolas,Menlo,monospace" font-size="16" fill="#86efac">✓ Git state inspected</text>
+    <text x="1125" y="360" font-family="Consolas,Menlo,monospace" font-size="16" fill="#86efac">✓ changed tests verified</text>
+    <text x="1125" y="390" font-family="Consolas,Menlo,monospace" font-size="16" fill="#86efac">✓ code relationships checked</text>
+    <text x="1125" y="420" font-family="Consolas,Menlo,monospace" font-size="16" fill="#86efac">✓ next action reconstructed</text>
+    <text x="1125" y="478" font-family="Consolas,Menlo,monospace" font-size="20" fill="#fbbf24">$wip resume</text>
+    <rect x="1125" y="510" width="350" height="110" rx="16" fill="#1f2937"/>
+    <text x="1150" y="545" font-size="16" font-weight="700" fill="#e2e8f0">Evidence-aware continuation</text>
+    <text x="1150" y="575" font-size="15" fill="#94a3b8">VERIFIED · INFERRED</text>
+    <text x="1150" y="603" font-size="15" fill="#94a3b8">REPORTED · UNKNOWN</text>
+  </g>
+
+  <g font-family="Inter,Segoe UI,Arial">
+    <rect x="70" y="752" width="1460" height="88" rx="24" fill="#ffffff" stroke="#dbeafe"/>
+    <text x="105" y="790" font-size="18" font-weight="750" fill="#0f172a">Five modes:</text>
+    <text x="205" y="790" font-size="18" fill="#2563eb">checkpoint</text><text x="330" y="790" font-size="18" fill="#64748b">·</text><text x="355" y="790" font-size="18" fill="#7c3aed">handoff</text><text x="455" y="790" font-size="18" fill="#64748b">·</text><text x="480" y="790" font-size="18" fill="#059669">recover</text><text x="575" y="790" font-size="18" fill="#64748b">·</text><text x="600" y="790" font-size="18" fill="#ea580c">resume</text><text x="690" y="790" font-size="18" fill="#64748b">·</text><text x="715" y="790" font-size="18" fill="#475569">status</text>
+    <text x="105" y="820" font-size="15" fill="#64748b">Metadata-only by default · No automatic destructive Git operations · MIT licensed</text>
+    <text x="1490" y="807" text-anchor="end" font-size="16" fill="#475569">github.com/MuzhiCoder/codex-wip-skill</text>
+  </g>
+</svg>
