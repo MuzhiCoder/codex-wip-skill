@@ -25,6 +25,12 @@ def read_json(path: Path):
         fail(f"invalid JSON at {path}: {exc}")
 
 
+def resolve_plugin_path(value: str) -> Path:
+    if not value.startswith("./"):
+        fail(f"plugin asset/component path must begin with ./: {value}")
+    return PLUGIN_ROOT / value[2:]
+
+
 def main() -> int:
     marketplace = read_json(MARKETPLACE)
     manifest = read_json(MANIFEST)
@@ -51,10 +57,37 @@ def main() -> int:
     version = str(manifest.get("version", ""))
     if not re.fullmatch(r"\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?", version):
         fail(f"manifest version is not SemVer-like: {version}")
+    if manifest.get("license") != "MIT":
+        fail("manifest license must be MIT")
+    if not (ROOT / "LICENSE").is_file():
+        fail("repository LICENSE file is missing")
     if manifest.get("skills") != "./skills/":
         fail("manifest skills path must be ./skills/")
     if not (SKILL_ROOT / "SKILL.md").is_file():
         fail("packaged wip skill is missing SKILL.md")
+
+    interface = manifest.get("interface") or {}
+    for key in ("logo", "composerIcon"):
+        value = interface.get(key)
+        if not isinstance(value, str) or not value:
+            fail(f"manifest interface.{key} is required")
+        asset = resolve_plugin_path(value)
+        if not asset.is_file():
+            fail(f"manifest interface.{key} asset is missing: {value}")
+
+    screenshots = interface.get("screenshots") or []
+    if len(screenshots) < 2:
+        fail("manifest must include at least two Plugin Directory screenshots")
+    for value in screenshots:
+        if not isinstance(value, str) or not value.endswith(".png"):
+            fail(f"screenshot must be a PNG path: {value}")
+        asset = resolve_plugin_path(value)
+        if asset.parent != PLUGIN_ROOT / "assets":
+            fail(f"screenshot must live directly under ./assets/: {value}")
+        if not asset.is_file():
+            fail(f"screenshot asset is missing: {value}")
+        if asset.stat().st_size < 10_000:
+            fail(f"screenshot asset looks unexpectedly small: {value}")
 
     skill_text = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
     if not skill_text.startswith("---\n") or "\nname: wip\n" not in skill_text[:500]:
@@ -87,7 +120,7 @@ def main() -> int:
         if legacy.read_bytes() != canonical.read_bytes():
             fail(f"legacy mirror drift: {legacy.relative_to(ROOT)} != {canonical.relative_to(ROOT)}")
 
-    print("OK: Codex plugin package and marketplace are internally consistent")
+    print("OK: Codex plugin package, assets, license, and marketplace are internally consistent")
     return 0
 
 
